@@ -1,0 +1,11 @@
+{
+  "name": "hackernews-node",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:hd719/GraphQL-Prisma-BP.git",
+  "author": "Hamel Desai <hameldesai93@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "graphql-yoga": "^1.17.0"
+  }
+}
