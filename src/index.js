@@ -1,4 +1,5 @@
 const { GraphQLServer } = require('graphql-yoga')
+const { prisma } = require('./prisma/generated/prisma-client')
 
 let links = [{
   id: 'link-0',
@@ -11,31 +12,24 @@ const resolvers = {
   Query: {
     info: () => `This is the very basic boilerplate set up`, // Scalar type root field
     // info: () => User! -> Object type root field
-    feed: () => links
+    feed: (root, args, context, info) => {
+      return context.prisma.links()
+    },
   },
 
   Mutation: {
-    post: (parent, args) => {
-      console.log(parent);
-      const link = {
-        id: `link-${idCount++}`,
-        description: args.description,
+    post: (root, args, context) => {
+      return context.prisma.createLink({
         url: args.url,
-      };
-      links.push(link);
-      return link;
+        description: args.description,
+      })
     }
-  },
-
-  Link: {
-    id: (parent) => parent.id,
-    description: (parent) => parent.description,
-    url: (parent) => parent.url,
   }
 }
 
 const server = new GraphQLServer({
   typeDefs: "./schema.graphql",
   resolvers,
+  context: { prisma },
 })
 server.start(() => console.log(`Server is running on http://localhost:4000`))
